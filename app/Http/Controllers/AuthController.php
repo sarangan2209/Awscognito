@@ -28,7 +28,6 @@ class AuthController extends Controller
             $request->password
         );
 
-
         if (isset($result['error'])) {
             return response()->json(['error' => $result['error']], 400);
         }
@@ -48,14 +47,12 @@ class AuthController extends Controller
             $request->confirmation_code
         );
 
-        if (!$result['success']) {
+        if (! $result['success']) {
             return response()->json(['error' => $result['error']], 400);
         }
 
         return response()->json(['message' => 'User confirmed successfully.'], 200);
     }
-
-
 
     public function login(Request $request)
     {
@@ -64,37 +61,38 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
         $result = $this->cognitoAuthService->loginUser($validated['email'], $validated['password']);
+
         return response()->json($result);
     }
 
     public function profile(Request $request)
     {
-    $token = $request->bearerToken();
+        $token = $request->bearerToken();
 
-    if (!$token) {
-        return response()->json(['error' => 'Token not provided'], 401);
-    }
+        if (! $token) {
+            return response()->json(['error' => 'Token not provided'], 401);
+        }
 
-    $result = $this->cognitoAuthService->getUserProfile($token);
+        $result = $this->cognitoAuthService->getUserProfile($token);
 
-    if (!$result['success']) {
-        return response()->json(['error' => $result['error']], 400);
-    }
+        if (! $result['success']) {
+            return response()->json(['error' => $result['error']], 400);
+        }
 
-    return response()->json($result);
+        return response()->json($result);
     }
 
     public function logout(Request $request)
     {
-        $token = $request->bearerToken(); 
+        $token = $request->bearerToken();
 
-        if (!$token) {
+        if (! $token) {
             return response()->json(['error' => 'Token not provided'], 401);
         }
 
         $result = $this->cognitoAuthService->logoutUser($token);
 
-        if (!$result['success']) {
+        if (! $result['success']) {
             return response()->json(['error' => $result['error']], 400);
         }
 
@@ -107,13 +105,12 @@ class AuthController extends Controller
 
         $result = $this->cognitoAuthService->forgotPassword($request->email);
 
-        if (!$result['success']) {
+        if (! $result['success']) {
             return response()->json(['error' => $result['error']], 400);
         }
 
         return response()->json(['message' => $result['message']]);
     }
-
 
     public function resetPassword(Request $request)
     {
@@ -129,13 +126,10 @@ class AuthController extends Controller
             $request->new_password
         );
 
-        if (!$result['success']) {
+        if (! $result['success']) {
             return response()->json(['error' => $result['error']], 400);
         }
 
         return response()->json(['message' => $result['message']]);
     }
-
-
-
 }
