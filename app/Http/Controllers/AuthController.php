@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ConfirmSignUpRequest;
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ResetPasswordRequest;
+use App\Models\User;
 use App\Services\CognitoAuthService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -14,19 +21,20 @@ class AuthController extends Controller
         $this->cognitoAuthService = $cognitoAuthService;
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'password' => 'required|min:8',
-        ]);
 
         $result = $this->cognitoAuthService->register(
             $request->name,
             $request->email,
             $request->password
         );
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
 
         if (isset($result['error'])) {
             return response()->json(['error' => $result['error']], 400);
@@ -35,12 +43,8 @@ class AuthController extends Controller
         return response()->json(['message' => 'User registered successfully. Check your email for verification.'], 201);
     }
 
-    public function confirmSignUp(Request $request)
+    public function confirmSignUp(ConfirmSignUpRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'confirmation_code' => 'required|string',
-        ]);
 
         $result = $this->cognitoAuthService->confirmSignUp(
             $request->email,
@@ -54,13 +58,13 @@ class AuthController extends Controller
         return response()->json(['message' => 'User confirmed successfully.'], 200);
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $validated = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-        $result = $this->cognitoAuthService->loginUser($validated['email'], $validated['password']);
+
+        $result = $this->cognitoAuthService->loginUser(
+            $request->email,
+            $request->password
+        );
 
         return response()->json($result);
     }
@@ -99,9 +103,8 @@ class AuthController extends Controller
         return response()->json($result);
     }
 
-    public function forgotPassword(Request $request)
+    public function forgotPassword(ForgotPasswordRequest $request)
     {
-        $request->validate(['email' => 'required|email']);
 
         $result = $this->cognitoAuthService->forgotPassword($request->email);
 
@@ -112,13 +115,8 @@ class AuthController extends Controller
         return response()->json(['message' => $result['message']]);
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'confirmation_code' => 'required|string',
-            'new_password' => 'required|min:8',
-        ]);
 
         $result = $this->cognitoAuthService->resetPassword(
             $request->email,
@@ -128,6 +126,12 @@ class AuthController extends Controller
 
         if (! $result['success']) {
             return response()->json(['error' => $result['error']], 400);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $user->password = Hash::make($request->new_password);
+            $user->save();
         }
 
         return response()->json(['message' => $result['message']]);
