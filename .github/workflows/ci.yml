@@ -3,11 +3,10 @@ name: Laravel CI
 on: 
   push:
     branches:
-      - unittest
-  # pull_request:
-  #   branches:
-  #     - main
-  #     - develop
+      - main
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   lint:
