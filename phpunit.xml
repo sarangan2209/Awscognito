@@ -16,9 +16,9 @@
         <include>
             <directory>app</directory>
         </include>
-        <exclude>
+        <!-- <exclude>
             <directory suffix=".php">./app/Services</directory>
-        </exclude>
+        </exclude> -->
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
