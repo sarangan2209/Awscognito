@@ -1,0 +1,29 @@
+name: Laravel CI
+
+on: 
+  push:
+    branches:
+      - unittest
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - develop
+
+  jobs:
+  lint:
+    name: Lint & Static Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: 8.2
+            tools: composer, pint
+
+      - name: Install dependencies
+          run: composer install --prefer-dist --no-progress --no-interaction      
+
+      - name: Run Laravel Pint (Code Formatter)
+          run: ./vendor/bin/pint --test
