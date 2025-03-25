@@ -24,12 +24,15 @@ jobs:
           coverage: xdebug
 
       - name: Install dependencies
+        working-directory: api
         run: composer install --prefer-dist --no-progress --no-interaction      
 
       - name: Run Laravel Pint
+        working-directory: api
         run: ./vendor/bin/pint --test
 
       - name: Run PHPUnit
+        working-directory: api
         run: ./vendor/bin/pest --coverage --min=90
 
   
