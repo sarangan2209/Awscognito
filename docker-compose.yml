@@ -1,0 +1,75 @@
+#local development settings
+
+x-defaults: &defaults
+  DB_DATABASE: cognito
+  DB_USERNAME: root
+  DB_PASSWORD: ""
+  APP_ENV: local
+  APP_DEBUG: "true"
+
+networks:
+  cognito-api:
+    driver: bridge
+
+services:
+  mysql:
+    container_name: mysql
+    networks:
+      - cognito-api
+    image: mysql:8.0
+    command: --sql_mode="" --event-scheduler=ON --max_allowed_packet=100M
+    env_file:
+      - ./api/.env      
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - cognito_mysql_data:/var/lib/mysql
+    ports:
+      - 3310:3306
+
+  api:
+    container_name: api
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: development
+    env_file:
+      - ./api/.env   
+    command: ["php-fpm"]         
+    environment:
+      <<: *defaults    
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./api:/var/www
+      - /var/www/storage
+    networks:
+      - cognito-api
+    depends_on:
+      - mysql
+
+  nginx:
+    container_name: nginx
+    networks:
+      - cognito-api
+    links:
+      - api    
+    image: nginx:1.23.3
+    ports:
+      - '7090:80'
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./api:/var/www:cached
+      - /var/www/storage
+    depends_on:
+      - api
+
+volumes:
+  cognito_mysql_data:
+
+
+
+
+
+
+
