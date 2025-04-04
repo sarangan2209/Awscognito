@@ -1,4 +1,4 @@
-name: php lint & unit test
+name: php pint & unit test
 
 on: 
   push:
@@ -9,8 +9,8 @@ on:
       - '**'
 
 jobs:
-  lint:
-    name: Lint & Unit test
+  pint:
+    name: Pint & Unit test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
