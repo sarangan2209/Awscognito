@@ -13,9 +13,10 @@
         "aws/aws-sdk-php": "^3.342",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.19",
         "laravel/tinker": "^2.10.1",
         "league/oauth2-client": "^2.8",
-        "socialiteproviders/manager": "^4.8"
+        "socialiteproviders/microsoft": "^4.6"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

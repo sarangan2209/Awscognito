@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LoginUserViaSocialiteController;
 use Illuminate\Http\Request;
-// use App\Http\Controllers\CognitoAuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
@@ -22,3 +22,6 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/forgotpassword', [AuthController::class, 'forgotPassword']);
 
 Route::post('/resetpassword', [AuthController::class, 'resetPassword']);
+
+Route::get('auth/{provider}/redirect', [LoginUserViaSocialiteController::class, 'create']);
+Route::get('auth/{provider}/callback', [LoginUserViaSocialiteController::class, 'store']);
