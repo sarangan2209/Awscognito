@@ -16,6 +16,7 @@
         "laravel/socialite": "^5.19",
         "laravel/tinker": "^2.10.1",
         "league/oauth2-client": "^2.8",
+        "socialiteproviders/cognito": "^4.1",
         "socialiteproviders/microsoft": "^4.6"
     },
     "require-dev": {

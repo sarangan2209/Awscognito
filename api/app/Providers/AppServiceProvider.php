@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Event::listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event) {
             $event->extendSocialite('microsoft', \SocialiteProviders\Microsoft\Provider::class);
+            $event->extendSocialite('cognito', \SocialiteProviders\Microsoft\Provider::class);
         });
     }
 }
