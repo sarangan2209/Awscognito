@@ -1,0 +1,46 @@
+{
+  "vpc-provider:account=369714029605:filter.tag:Name=ftp-test:region=us-east-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0f3c06e636dbebbf9",
+    "vpcCidrBlock": "10.0.0.0/21",
+    "ownerAccountId": "369714029605",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "ftp-server-public-",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-04e1b0818a2dbf853",
+            "cidr": "10.0.2.0/24",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0683f3be0af77fe26"
+          },
+          {
+            "subnetId": "subnet-00d89050f893acc2f",
+            "cidr": "10.0.3.0/24",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-073be36deef8c2968"
+          }
+        ]
+      },
+      {
+        "name": "ftp-server-private-",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-00dd08696f7c77cdf",
+            "cidr": "10.0.0.0/24",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0c2d386329a53b0a9"
+          },
+          {
+            "subnetId": "subnet-046c1c4fdd89f9e92",
+            "cidr": "10.0.1.0/24",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-0e337485d99941d3d"
+          }
+        ]
+      }
+    ]
+  }
+}
