@@ -17,7 +17,7 @@ const app = new cdk.App();
 // }, 'NetworkStack');
 
 
-const AWS_ACCOUNT_ID = '369714029605'; 
+const AWS_ACCOUNT_ID = ''; 
 const AWS_REGION = 'us-east-1';
 
 // new FtpEc2Stack(app, 'FtpEc2Stack', {
